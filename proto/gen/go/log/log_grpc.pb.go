@@ -4,7 +4,7 @@
 // - protoc             v3.21.8
 // source: log/log.proto
 
-package user
+package log
 
 import (
 	context "context"
@@ -36,7 +36,7 @@ func NewLogServiceClient(cc grpc.ClientConnInterface) LogServiceClient {
 
 func (c *logServiceClient) AddLog(ctx context.Context, in *AddLogReq, opts ...grpc.CallOption) (*AddLogRes, error) {
 	out := new(AddLogRes)
-	err := c.cc.Invoke(ctx, "/user.LogService/AddLog", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/log.LogService/AddLog", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (c *logServiceClient) AddLog(ctx context.Context, in *AddLogReq, opts ...gr
 
 func (c *logServiceClient) GetLogs(ctx context.Context, in *GetLogsReq, opts ...grpc.CallOption) (*GetLogsRes, error) {
 	out := new(GetLogsRes)
-	err := c.cc.Invoke(ctx, "/user.LogService/GetLogs", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/log.LogService/GetLogs", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func _LogService_AddLog_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user.LogService/AddLog",
+		FullMethod: "/log.LogService/AddLog",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LogServiceServer).AddLog(ctx, req.(*AddLogReq))
@@ -112,7 +112,7 @@ func _LogService_GetLogs_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user.LogService/GetLogs",
+		FullMethod: "/log.LogService/GetLogs",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LogServiceServer).GetLogs(ctx, req.(*GetLogsReq))
@@ -124,7 +124,7 @@ func _LogService_GetLogs_Handler(srv interface{}, ctx context.Context, dec func(
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var LogService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "user.LogService",
+	ServiceName: "log.LogService",
 	HandlerType: (*LogServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

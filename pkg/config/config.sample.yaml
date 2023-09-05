@@ -1,0 +1,6 @@
+environment: production
+port: 8888
+secret_api_key: ######
+
+database_uri: mongodb://username:password@host:27017
+database_name: logs

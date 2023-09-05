@@ -1,8 +1,10 @@
 syntax = "proto3";
 
-package user;
+package log;
 
-option go_package = "./;user";
+option go_package = "./;log";
+
+import "log/base.proto";
 
 service LogService {
   rpc AddLog(AddLogReq) returns (AddLogRes);
@@ -23,12 +25,12 @@ enum LogLevel {
 // =================================================================
 
 message LogInfo {
-  string   id           = 1;
-  string   service_name = 2;
-  LogLevel level        = 3;
-  bytes    content      = 4;
-  string   trace_id     = 5;
-  string   created_at   = 6;
+  string id           = 1;
+  string service_name = 2;
+  string level        = 3;
+  bytes  content      = 4;
+  string trace_id     = 5;
+  string created_at   = 6;
 }
 
 // =================================================================
@@ -43,11 +45,16 @@ message AddLogReq {
 message AddLogRes { LogInfo log = 1; }
 
 message GetLogsReq {
-  string   service_name = 1;
-  LogLevel level        = 2;
-  string   trace_id     = 3;
-  uint64   created_from = 4;
-  uint64   created_to   = 5;
+  string        service_name = 1;
+  LogLevel      level        = 2;
+  string        trace_id     = 3;
+  int64         created_from = 4;
+  int64         created_to   = 5;
+  PaginationReq pagination   = 6;
+  SortReq       sort         = 7;
 }
 
-message GetLogsRes { repeated LogInfo user = 1; }
+message GetLogsRes {
+  repeated LogInfo logs       = 1;
+  PaginationRes    pagination = 2;
+}
