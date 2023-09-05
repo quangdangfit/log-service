@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./;user";
+
+service LogService {
+  rpc AddLog(AddLogReq) returns (AddLogRes);
+  rpc GetLogs(GetLogsReq) returns (GetLogsRes);
+}
+
+// =================================================================
+
+enum LogLevel {
+  LOG_LEVEL_INVALID = 0;
+  LOG_LEVEL_DEBUG   = 1;
+  LOG_LEVEL_INFO    = 2;
+  LOG_LEVEL_WARNING = 3;
+  LOG_LEVEL_ERROR   = 4;
+  LOG_LEVEL_FATAL   = 5;
+}
+
+// =================================================================
+
+message LogInfo {
+  string   id           = 1;
+  string   service_name = 2;
+  LogLevel level        = 3;
+  bytes    content      = 4;
+  string   trace_id     = 5;
+  string   created_at   = 6;
+}
+
+// =================================================================
+
+message AddLogReq {
+  string   service_name = 1;
+  LogLevel level        = 2;
+  bytes    content      = 3;
+  string   trace_id     = 4;
+}
+
+message AddLogRes { LogInfo log = 1; }
+
+message GetLogsReq {
+  string   service_name = 1;
+  LogLevel level        = 2;
+  string   trace_id     = 3;
+  uint64   created_from = 4;
+  uint64   created_to   = 5;
+}
+
+message GetLogsRes { repeated LogInfo user = 1; }
