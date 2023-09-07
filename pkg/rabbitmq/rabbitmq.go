@@ -23,23 +23,11 @@ type Topic struct {
 	Exchange string
 }
 
-// Queue : Queue
-type Queue struct {
-	Name   string
-	Topics []Topic
-}
-
-// Declaration : Declaration
-type Declaration struct {
-	Exchanges []string
-	Queues    []Queue
-}
-
 type mqImpl struct {
 	url              string
 	connection       *amqp.Connection
 	channel          *amqp.Channel
-	declaration      *Declaration
+	queues           []string
 	connectionClosed bool
 	channelClosed    bool
 	chanErr          chan *amqp.Error
@@ -49,9 +37,10 @@ type mqImpl struct {
  *                           INTERFACE IMPLEMENTATION
  *========================================================================**/
 
-func New(url string, declarationFile string) (MQ, error) {
+func New(url string, queues ...string) (MQ, error) {
 	mq := &mqImpl{
-		url: url,
+		url:    url,
+		queues: queues,
 	}
 
 	_, err := mq.newConnection()
@@ -148,22 +137,19 @@ func (mq *mqImpl) reconnect() (err error) {
 }
 
 func (mq *mqImpl) consuming(chanMsg chan amqp.Delivery, chanErr chan error) {
-	for _, queue := range mq.declaration.Queues {
-		go func(qName string) {
-			// Consume: queue, consumer, autoAck, exclusive, noLocal, noWait, args
-			msgs, err := mq.channel.Consume(qName, "", false, false, false, false, nil)
-			if err != nil {
-				chanErr <- err
-			}
+	for _, queue := range mq.queues {
+		msgs, err := mq.channel.Consume(queue, "", false, false, false, false, nil)
+		if err != nil {
+			chanErr <- err
+		}
 
-			forever := make(chan bool)
-			go func() {
-				for d := range msgs {
-					chanMsg <- d
-				}
-			}()
-			<-forever
-		}(queue.Name)
+		forever := make(chan bool)
+		go func() {
+			for d := range msgs {
+				chanMsg <- d
+			}
+		}()
+		<-forever
 	}
 }
 

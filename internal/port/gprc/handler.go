@@ -39,7 +39,7 @@ func (h *LogHandler) AddLog(ctx context.Context, req *pb.AddLogReq) (*pb.AddLogR
 		TraceId:     req.TraceId,
 	})
 	if err != nil {
-		logger.Error("Failed to register ", err)
+		logger.Error("Failed to add log ", err)
 		return nil, err
 	}
 
@@ -71,7 +71,7 @@ func (h *LogHandler) GetLogs(ctx context.Context, req *pb.GetLogsReq) (*pb.GetLo
 
 	logs, pagination, err := h.service.GetLogs(ctx, r)
 	if err != nil {
-		logger.Error("Failed to register ", err)
+		logger.Error("Failed to get logs ", err)
 		return nil, err
 	}
 

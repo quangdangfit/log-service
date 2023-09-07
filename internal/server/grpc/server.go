@@ -16,7 +16,7 @@ import (
 
 type Server struct {
 	engine    *grpc.Server
-	cfg       *config.Schema
+	cfg       *config.Config
 	validator validation.Validation
 	db        mongodb.DB
 }
