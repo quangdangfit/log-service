@@ -33,7 +33,7 @@ func (r *LogRepo) collectionName() string {
 	now := time.Now().UTC()
 	year := now.Year()
 	month := now.Month()
-	return fmt.Sprintf("logs_%d_%d", year, month)
+	return fmt.Sprintf("logs_%d_%02d", year, month)
 }
 
 func (r *LogRepo) AddLog(ctx context.Context, in *dto.AddLogReq) (*dto.Log, error) {

@@ -15,6 +15,7 @@ const (
 	_idField       = "_id"
 )
 
+//go:generate mockery --name=DB
 type DB interface {
 	GetCollection(collection string) *mongo.Collection
 	FindById(ctx context.Context, collection string, id string, result interface{}) error
