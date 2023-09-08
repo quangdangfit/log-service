@@ -1,0 +1,69 @@
+name: main
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+#  unittest:
+#    runs-on: ubuntu-latest
+#    env:
+#      environment: testing
+#      database_uri: postgres://postgres:test@localhost:5432/postgres
+#      redis_uri: localhost:6379
+#
+#    services:
+#      postgres:
+#        image: postgres:12
+#        env:
+#          POSTGRES_PASSWORD: "test"
+#        ports:
+#          - 5432:5432
+#      redis:
+#        image: redis:alpine
+#        ports:
+#          - 6379:6379
+#
+#    steps:
+#      - name: Checkout source code
+#        uses: actions/checkout@v3
+#
+#      - name: Set up Golang
+#        uses: actions/setup-go@v2
+#        with:
+#          go-version: 1.20.x
+#
+#      - name: Cache go pkg
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/go/pkg/mod
+#            ~/.cache/go-build
+#            ~/Library/Caches/go-build
+#            %LocalAppData%\go-build
+#          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+#          restore-keys: |
+#            ${{ runner.os }}-go-
+#
+#      - name: Install dependencies
+#        run: go mod download
+#
+#      - name: Build
+#        run: go build -o main cmd/api
+#        env:
+#          GOOS: linux
+#          GOARCH: amd64
+#          CGO_ENABLED: 0
+#
+#      - name: Run unit tests
+#        run: make unittest
+
+  codecov:
+#    needs: unittest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

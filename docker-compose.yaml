@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  goshop:
+    build: .
+    image: "github.com/quangdangfit/log-service"
+    ports:
+      - "8888:8888"
+    environment:
+      environment: production
+      port: 8888
+      secret_api_key: admin
+      database_uri: mongodb://root:123456@mongodb:27017/?authSource=admin
+      database_name: logs
+      rabbitmq_url: amqp://admin:123456@rabbitmq:5672
+
+    depends_on:
+      - rabbitmq
+      - mongodb
+
+  mongodb:
+    restart: always
+    image: "mongo:bionic"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+
+  rabbitmq:
+    restart: always
+    image: "masstransit/rabbitmq"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: 123456
